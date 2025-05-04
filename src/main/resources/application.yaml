@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER}
+    initialization-mode: always
+  jpa:
+    database-platform: ${SPRING_JPA_DATABASE_PLATFORM}
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: ${SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE}
+      max-request-size: ${SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE}
+
+amazonProperties:
+  endpointUrl: ${AMAZON_PROPERTIES_ENDPOINT_URL}
+  accessKey: ${AMAZON_PROPERTIES_ACCESS_KEY}
+  secretKey: ${AMAZON_PROPERTIES_SECRET_KEY}
+  videoBucketName: ${AMAZON_PROPERTIES_VIDEO_BUCKET_NAME}
+  processedBucketName: ${AMAZON_PROPERTIES_PROCESSED_BUCKET_NAME}
+  reportBucketName: ${AMAZON_PROPERTIES_REPORT_BUCKET_NAME}
+  region: ${AWS_REGION}
+  queue-url: ${QUEUE-URL}
