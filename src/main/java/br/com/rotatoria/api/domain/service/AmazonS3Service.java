@@ -22,19 +22,16 @@ public class AmazonS3Service {
     private final S3Client s3client;
     private final S3Presigner s3Presigner;
 
-    @Value("${amazonProperties.videoBucketName}")
-    private String videoBucketName;
-
     public AmazonS3Service(S3Client s3client, S3Presigner s3Presigner) {
         this.s3client = s3client;
         this.s3Presigner = s3Presigner;
     }
 
-
     public String createPresignedGetUrl(String fileName, String bucketName) {
         GetObjectRequest objectRequest = GetObjectRequest.builder()
                 .bucket(bucketName)
                 .key(fileName)
+                .responseContentDisposition("inline")
                 .build();
 
         GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
@@ -47,11 +44,10 @@ public class AmazonS3Service {
         return presignedRequest.url().toExternalForm();
     }
 
-    public PresignedPutUrlDTO createPresignedPutUrl(String originalFileName) {
-        String formattedFileName = generateFileName(originalFileName);
-
+    public PresignedPutUrlDTO createPresignedPutUrl(String originalFileName, String bucketName, String extension) {
+        String formattedFileName = generateFileName(originalFileName, extension);
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(videoBucketName)
+                .bucket(bucketName)
                 .key(formattedFileName)
                 .build();
 
@@ -69,11 +65,9 @@ public class AmazonS3Service {
         return dto;
     }
 
-    private String generateFileName(String fileName) {
+    private String generateFileName(String fileName, String extension) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String date = LocalDateTime.now().format(dateFormatter);
-        return fileName + "-" + date + "-" + System.currentTimeMillis() + ".mp4";
+        return fileName + "-" + date + "-" + System.currentTimeMillis() + extension;
     }
-
-
 }

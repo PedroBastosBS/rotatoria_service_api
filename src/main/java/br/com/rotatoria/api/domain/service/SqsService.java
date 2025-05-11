@@ -19,8 +19,8 @@ public class SqsService {
     }
 
     public void sendVideoMessage(Video video) {
-        String messageBody = String.format("{\"id\":%d,\"filename\":\"%s\"}", video.getId(), video.getFileName());
-
+        String messageBody = String.format("{\"id\":%d,\"fileName\":\"%s\"}", video.getId(), video.getFileName());
+        System.out.println(messageBody);
         SendMessageRequest request = SendMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .messageBody(messageBody)

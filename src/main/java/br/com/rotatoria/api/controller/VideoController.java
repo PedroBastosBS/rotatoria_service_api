@@ -19,13 +19,13 @@ public class VideoController {
     }
 
     @PostMapping
-    public ResponseEntity<Video> uploadVideoToS3(@RequestBody VideoRequestDTO videoRequestDTO) {
-        return videoService.uploadVideoToS3(videoRequestDTO);
+    public ResponseEntity<Video> create(@RequestBody VideoRequestDTO videoRequestDTO) {
+        return videoService.create(videoRequestDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VideoResponseDTO> downloadProcessedVideo(@PathVariable Long id) {
-        return videoService.downloadProcessedVideo(id);
+    public ResponseEntity<VideoResponseDTO> findById(@PathVariable Long id) {
+        return videoService.findById(id);
     }
 
     @GetMapping
@@ -35,11 +35,13 @@ public class VideoController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<VideoResponseDTO> updateProcessingStatus(@PathVariable Long id, @RequestBody VideoStatusDTO videoStatusDTO) {
+        System.out.println("atualizando status de processamento...");
         return videoService.updateProcessingStatus(id, videoStatusDTO);
     }
 
     @GetMapping("submit_file")
-    public ResponseEntity<PresignedPutUrlDTO> getPresignedPutUrl(@RequestParam String fileName) {
-        return ResponseEntity.ok(videoService.getPresignedPutUrl(fileName));
+    public ResponseEntity<PresignedPutUrlDTO> getPresignedPutUrl(@RequestParam String fileName, @RequestParam(required = false) boolean isProcessed) {
+        return ResponseEntity.ok(videoService.getPresignedPutUrl(fileName, isProcessed));
     }
+
 }

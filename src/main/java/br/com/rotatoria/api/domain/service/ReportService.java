@@ -2,7 +2,7 @@ package br.com.rotatoria.api.domain.service;
 
 import br.com.rotatoria.api.domain.dto.report.ReportRequestDTO;
 import br.com.rotatoria.api.domain.dto.report.ReportResponseDTO;
-import br.com.rotatoria.api.domain.dto.report.ReportStatusDTO;
+import br.com.rotatoria.api.domain.dto.video.PresignedPutUrlDTO;
 import br.com.rotatoria.api.domain.model.Report;
 import br.com.rotatoria.api.domain.repository.ReportRepository;
 import br.com.rotatoria.api.domain.repository.VideoRepository;
@@ -37,6 +37,7 @@ public class ReportService {
         System.out.println(video);
         var report = new Report();
         report.setName(reportRequestDTO.getName());
+        report.setFileName(reportRequestDTO.getFileName());
         report.setStatus(reportRequestDTO.getStatus());
 
         reportRepository.save(report);
@@ -52,22 +53,13 @@ public class ReportService {
         var reportResponseDTO = new ReportResponseDTO();
 
         reportResponseDTO.setName(report.getName());
-        reportResponseDTO.setReportUrl(amazonS3Service.createPresignedGetUrl(report.getName(), bucketName));
+        reportResponseDTO.setReportUrl(amazonS3Service.createPresignedGetUrl(report.getFileName(), bucketName));
         reportResponseDTO.setStatus(report.getStatus());
 
         return ResponseEntity.ok().body(reportResponseDTO);
     }
 
-    @Transactional
-    public ResponseEntity<ReportResponseDTO> updateProcessingStatus(Long id, ReportStatusDTO reportStatusDTO) {
-        var report = reportRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi encontrado na base de dados report com id = " + id));
-        var reportResponseDTO = new ReportResponseDTO();
-
-        reportResponseDTO.setName(report.getName());
-        reportResponseDTO.setReportUrl(amazonS3Service.createPresignedGetUrl(report.getName(), bucketName));
-        reportResponseDTO.setStatus(reportStatusDTO.getStatus());
-
-        return ResponseEntity.ok().body(reportResponseDTO);
+    public PresignedPutUrlDTO getPresignedPutUrl(String fileName) {
+        return amazonS3Service.createPresignedPutUrl(fileName, bucketName, ".csv");
     }
-    
 }

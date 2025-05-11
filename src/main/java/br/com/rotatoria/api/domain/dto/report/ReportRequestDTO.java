@@ -8,6 +8,7 @@ public class ReportRequestDTO {
 
     private Long videoId;
     private String name;
+    private String fileName;
     private ProcessingStatus status;
 
 }

@@ -1,0 +1,3 @@
+ALTER TABLE reports
+ADD COLUMN file_name VARCHAR(255);
+

@@ -2,7 +2,7 @@ package br.com.rotatoria.api.controller;
 
 import br.com.rotatoria.api.domain.dto.report.ReportRequestDTO;
 import br.com.rotatoria.api.domain.dto.report.ReportResponseDTO;
-import br.com.rotatoria.api.domain.dto.report.ReportStatusDTO;
+import br.com.rotatoria.api.domain.dto.video.PresignedPutUrlDTO;
 import br.com.rotatoria.api.domain.model.Report;
 import br.com.rotatoria.api.domain.service.ReportService;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +28,8 @@ public class ReportController {
         return reportService.findById(id);
     }
 
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<ReportResponseDTO> updateProcessingStatus(@PathVariable Long id, @RequestBody ReportStatusDTO reportStatusDTO) {
-//        return reportService.updateProcessingStatus(id, reportStatusDTO);
-//    }
+    @GetMapping("submit_file")
+    public ResponseEntity<PresignedPutUrlDTO> getPresignedPutUrl(@RequestParam String fileName) {
+        return ResponseEntity.ok(reportService.getPresignedPutUrl(fileName));
+    }
 }
